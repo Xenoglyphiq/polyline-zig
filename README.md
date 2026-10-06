@@ -107,10 +107,10 @@ There is no io layer: everything works on in-memory slices.
 
 | Benchmark | Reference | This port | Ratio |
 |---|---|---|---|
-| Encode 100k points | Rust `polyline` | — | — |
-| Decode 100k points | Rust `polyline` | — | — |
+| Encode 100k points | Rust `polyline` 0.11.0: 0.892 ms | 1.308 ms | 1.47× |
+| Decode 100k points | Rust `polyline` 0.11.0: 0.643 ms | 0.642 ms | 1.00× |
 
-Measured with `zig build bench` (ReleaseFast) using the shared method in `.spec/bench/README.md`. Recorded before v0.1.0.
+Medians on `.spec/bench/route_100k.polyline` (100,000 points), measured 2026-10-05 on an Apple M5 Pro with `zig build bench` (ReleaseFast), Zig 0.17.0. Three rounds interleaved with the reference, following `.spec/bench/README.md`. Ratio = this port ÷ reference; the spec's target is within 2×.
 
 ## License
 
