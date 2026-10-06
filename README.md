@@ -101,6 +101,7 @@ There is no io layer: everything works on in-memory slices.
 | `zig build test --fuzz=1M` | Fuzz the decoder |
 | `zig build conformance` | Every case in `.spec/conformance/manifest.json` |
 | `zig build examples` | The three canonical examples |
+| `zig build bench` | Timings on `.spec/bench/route_100k.polyline` (always ReleaseFast; method in `.spec/bench/README.md`) |
 
 ## Performance
 
@@ -109,7 +110,7 @@ There is no io layer: everything works on in-memory slices.
 | Encode 100k points | Rust `polyline` | — | — |
 | Decode 100k points | Rust `polyline` | — | — |
 
-Recorded before v0.1.0.
+Measured with `zig build bench` (ReleaseFast) using the shared method in `.spec/bench/README.md`. Recorded before v0.1.0.
 
 ## License
 

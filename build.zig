@@ -30,6 +30,24 @@ pub fn build(b: *std.Build) void {
     const conformance_step = b.step("conformance", "Run the spec's conformance cases");
     conformance_step.dependOn(&run_conformance.step);
 
+    // zig build bench: timings per .spec/bench/README.md, always ReleaseFast.
+    const bench_mod = b.createModule(.{
+        .root_source_file = b.path("src/polyline.zig"),
+        .target = target,
+        .optimize = .ReleaseFast,
+    });
+    const bench = b.addExecutable(.{
+        .name = "bench",
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("tools/bench.zig"),
+            .target = target,
+            .optimize = .ReleaseFast,
+            .imports = &.{.{ .name = "polyline", .module = bench_mod }},
+        }),
+    });
+    const bench_step = b.step("bench", "Time encode and decode on .spec/bench/route_100k.polyline");
+    bench_step.dependOn(&b.addRunArtifact(bench).step);
+
     // zig build examples: the three canonical examples.
     const examples_step = b.step("examples", "Run the three canonical examples");
     inline for (.{ "encode_route", "decode_route", "precision_6" }) |name| {
