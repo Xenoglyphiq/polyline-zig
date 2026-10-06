@@ -8,6 +8,11 @@ Requires Zig **0.17.0**. Standard library only.
 
 ## Install
 
+> **Not released yet.** `v0.1.0` is the first tag and isn't published; until then, fetch `main`:
+> `zig fetch --save git+https://github.com/Xenoglyphiq/polyline-zig#main`
+
+Once released:
+
 ```
 zig fetch --save git+https://github.com/Xenoglyphiq/polyline-zig#v0.1.0
 ```
