@@ -1,0 +1,74 @@
+# Polyline — capability manifest (validated by .kit/schemas/capability.schema.json).
+# Canonical names are snake_case; types use .kit/CONVENTIONS.md §5.
+id: polyline
+name: Polyline
+summary: Encode and decode Google's Encoded Polyline Algorithm Format — lists of coordinates as compact ASCII strings.
+spec_version: 0.1.0
+
+implements:
+  - name: Encoded Polyline Algorithm Format
+    version: "unversioned (retrieved 2026-10-05)"
+    url: https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+    scope: encode and decode, precision 1–10
+
+types: []
+
+operations:
+  - name: encode
+    layer: core
+    doc: Encode a list of points as a polyline string. Points are (lon, lat); the string stores latitude first.
+    inputs:
+      - { name: points, type: list<lonlat> }
+    options:
+      - { name: precision, type: u8, default: 5, doc: "Decimal places kept, 1–10. 5 is Google's; 6 is OSRM's and Valhalla's." }
+    output: string
+    errors: [polyline.non_finite, polyline.overflow, polyline.precision_out_of_range, polyline.too_many_points]
+    uses_limits: [max_points]
+  - name: decode
+    layer: core
+    doc: Decode a polyline string into a list of (lon, lat) points.
+    inputs:
+      - { name: text, type: string }
+    options:
+      - { name: precision, type: u8, default: 5, doc: Must match the precision used to encode. }
+    output: list<lonlat>
+    errors: [polyline.invalid_char, polyline.truncated, polyline.overflow, polyline.precision_out_of_range, polyline.too_many_points, polyline.text_too_long]
+    uses_limits: [max_points, max_text_length]
+
+errors:
+  - { code: polyline.invalid_char, kind: invalid_input, doc: A byte outside ASCII 63–126. Offset is the byte's index. }
+  - { code: polyline.truncated, kind: invalid_input, doc: "The input ends mid-value, or holds a latitude with no longitude. Offset is the start of the incomplete value." }
+  - { code: polyline.overflow, kind: invalid_input, doc: "A scaled value, delta or running sum doesn't fit in a signed 64-bit integer." }
+  - { code: polyline.precision_out_of_range, kind: invalid_input, doc: Precision outside 1–10. }
+  - { code: polyline.non_finite, kind: invalid_input, doc: A coordinate is NaN or infinite. }
+  - { code: polyline.too_many_points, kind: limit_exceeded, doc: More points than max_points. }
+  - { code: polyline.text_too_long, kind: limit_exceeded, doc: Input longer than max_text_length bytes. }
+
+limits:
+  - { name: max_points, type: u64, default: 1000000, reason: Bound output size on untrusted input }
+  - { name: max_text_length, type: u64, default: 16777216, reason: Bound work before decoding starts (16 MiB) }
+
+examples:
+  - id: encode_route
+    title: Encode a three-point route
+    steps: [Build three (lon, lat) points, Call encode, Print the string]
+  - id: decode_route
+    title: Decode Google's documented example
+    steps: ["Call decode on _p~iF~ps|U_ulLnnqC_mqNvxq`@", Print each point as lon and lat]
+  - id: precision_6
+    title: Round-trip a route at precision 6
+    steps: [Encode a route with precision 6, Decode it with precision 6, Print both and confirm they match]
+
+conformance:
+  oracle: { language: python, package: polyline, version: "2.0.4" }
+  manifest: conformance/manifest.json
+  levels: [core, full]
+
+performance:
+  reference: Rust polyline crate (version pinned with the benchmark inputs) on bench/route_100k
+  target: within 2x of reference
+
+ports:
+  - { language: zig, status: planned, package: polyline, dependency_tier: T0 }
+  - { language: julia, status: planned, package: EncodedPolyline, dependency_tier: T0 }
+  - { language: nim, status: planned, package: polyline, dependency_tier: T0 }

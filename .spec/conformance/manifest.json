@@ -1,0 +1,1070 @@
+{
+  "capability": "polyline",
+  "spec_version": "0.1.0",
+  "oracle": {
+    "language": "python",
+    "package": "polyline",
+    "version": "2.0.4",
+    "script": "generate/generate.py"
+  },
+  "generated_at": "2026-10-05T00:00:00Z",
+  "cases": [
+    {
+      "id": "encode.google_example",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Google's documented example",
+      "input": {
+        "value": [
+          {
+            "lat": 38.5,
+            "lon": -120.2
+          },
+          {
+            "lat": 40.7,
+            "lon": -120.95
+          },
+          {
+            "lat": 43.252,
+            "lon": -126.453
+          }
+        ]
+      },
+      "expect": {
+        "value": "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+      },
+      "compare": "exact",
+      "source": "oracle",
+      "tags": [
+        "canonical"
+      ]
+    },
+    {
+      "id": "encode.single_point",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "One point",
+      "input": {
+        "value": [
+          {
+            "lat": 40.748441,
+            "lon": -73.985713
+          }
+        ]
+      },
+      "expect": {
+        "value": "wtuwFtiqbM"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.negatives",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Southern and western hemispheres",
+      "input": {
+        "value": [
+          {
+            "lat": -34.6037,
+            "lon": -58.3816
+          },
+          {
+            "lat": -33.4489,
+            "lon": -70.6693
+          }
+        ]
+      },
+      "expect": {
+        "value": "bperE~sicJop`Fb}~iA"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.cross_equator",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Latitude changes sign",
+      "input": {
+        "value": [
+          {
+            "lat": 0.5,
+            "lon": 36.8219
+          },
+          {
+            "lat": -0.5,
+            "lon": 36.8219
+          }
+        ]
+      },
+      "expect": {
+        "value": "_t`B{wv_F~hbE?"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.cross_prime_meridian",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Longitude changes sign near 0",
+      "input": {
+        "value": [
+          {
+            "lat": 51.5,
+            "lon": -0.1
+          },
+          {
+            "lat": 51.5,
+            "lon": 0.1
+          }
+        ]
+      },
+      "expect": {
+        "value": "_riyH~oR?_af@"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.cross_antimeridian",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Longitude jumps from +179.9 to -179.9",
+      "input": {
+        "value": [
+          {
+            "lat": -16.5,
+            "lon": 179.9
+          },
+          {
+            "lat": -16.5,
+            "lon": -179.9
+          }
+        ]
+      },
+      "expect": {
+        "value": "~sucB_v_ia@?~l`scA"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.duplicate_points",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Zero deltas encode as ??",
+      "input": {
+        "value": [
+          {
+            "lat": 48.8566,
+            "lon": 2.3522
+          },
+          {
+            "lat": 48.8566,
+            "lon": 2.3522
+          }
+        ]
+      },
+      "expect": {
+        "value": "wheiHgljM??"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.precision_1",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Coarsest precision",
+      "input": {
+        "value": [
+          {
+            "lat": 37.8,
+            "lon": -122.4
+          },
+          {
+            "lat": 34.1,
+            "lon": -118.2
+          }
+        ]
+      },
+      "options": {
+        "precision": 1
+      },
+      "expect": {
+        "value": "sVnkAhAsA"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.precision_6",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "OSRM / Valhalla precision",
+      "input": {
+        "value": [
+          {
+            "lat": 40.748441,
+            "lon": -73.985713
+          },
+          {
+            "lat": 40.751657,
+            "lon": -73.978569
+          },
+          {
+            "lat": 40.785091,
+            "lon": -73.968285
+          }
+        ]
+      },
+      "options": {
+        "precision": 6
+      },
+      "expect": {
+        "value": "qxavlA`jvblC_hEo}Lsh`AwaS"
+      },
+      "compare": "exact",
+      "source": "oracle",
+      "tags": [
+        "canonical"
+      ]
+    },
+    {
+      "id": "encode.precision_10",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Finest precision; values exceed 32 bits (D-001)",
+      "input": {
+        "value": [
+          {
+            "lat": 89.9999999999,
+            "lon": -179.9999999999
+          },
+          {
+            "lat": -89.9999999999,
+            "lon": 179.9999999999
+          }
+        ]
+      },
+      "options": {
+        "precision": 10
+      },
+      "expect": {
+        "value": "}~rwdkks@|~fpjwwgBz~fpjwwgB{~navoppE"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.out_of_range",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Out-of-range coordinates still encode (A6)",
+      "input": {
+        "value": [
+          {
+            "lat": 100.0,
+            "lon": 200.0
+          },
+          {
+            "lat": -100.0,
+            "lon": -200.0
+          }
+        ]
+      },
+      "expect": {
+        "value": "_gjaR_ouce@~nuce@~~khkA"
+      },
+      "compare": "exact",
+      "source": "oracle"
+    },
+    {
+      "id": "encode.tie_positive",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "x * 10^5 is exactly 2.5: rounds to 3, not 2 (A1)",
+      "input": {
+        "value": [
+          {
+            "lat": 2.5e-05,
+            "lon": 2.5e-05
+          }
+        ]
+      },
+      "expect": {
+        "value": "EE"
+      },
+      "compare": "exact",
+      "source": "oracle",
+      "tags": [
+        "rounding"
+      ]
+    },
+    {
+      "id": "encode.tie_negative",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "x * 10^5 is exactly -4.5: rounds to -5, not -4 (A1)",
+      "input": {
+        "value": [
+          {
+            "lat": -4.5e-05,
+            "lon": -4.5e-05
+          }
+        ]
+      },
+      "expect": {
+        "value": "HH"
+      },
+      "compare": "exact",
+      "source": "oracle",
+      "tags": [
+        "rounding"
+      ]
+    },
+    {
+      "id": "encode.empty",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "Empty list encodes to empty string (oracle crashes)",
+      "input": {
+        "value": []
+      },
+      "expect": {
+        "value": ""
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "encode.near_tie_below",
+      "op": "encode",
+      "level": "core",
+      "group": "encode",
+      "description": "x * 10^5 is the largest double below 0.5: rounds to 0 (D-002)",
+      "input": {
+        "value": [
+          {
+            "lat": 4.9999999999999996e-06,
+            "lon": 4.9999999999999996e-06
+          }
+        ]
+      },
+      "expect": {
+        "value": "??"
+      },
+      "compare": "exact",
+      "source": "spec",
+      "tags": [
+        "rounding"
+      ]
+    },
+    {
+      "id": "encode.error.nan",
+      "op": "encode",
+      "level": "core",
+      "group": "encode.error",
+      "description": "NaN latitude",
+      "input": {
+        "value": [
+          {
+            "lat": "NaN",
+            "lon": 1.0
+          }
+        ]
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.non_finite"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "encode.error.pos_inf",
+      "op": "encode",
+      "level": "core",
+      "group": "encode.error",
+      "description": "+Infinity longitude",
+      "input": {
+        "value": [
+          {
+            "lat": 1.0,
+            "lon": "Infinity"
+          }
+        ]
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.non_finite"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "encode.error.neg_inf",
+      "op": "encode",
+      "level": "core",
+      "group": "encode.error",
+      "description": "-Infinity latitude",
+      "input": {
+        "value": [
+          {
+            "lat": "-Infinity",
+            "lon": 1.0
+          }
+        ]
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.non_finite"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "encode.error.precision_0",
+      "op": "encode",
+      "level": "core",
+      "group": "encode.error",
+      "description": "Precision below range",
+      "input": {
+        "value": [
+          {
+            "lat": 38.5,
+            "lon": -120.2
+          },
+          {
+            "lat": 40.7,
+            "lon": -120.95
+          },
+          {
+            "lat": 43.252,
+            "lon": -126.453
+          }
+        ]
+      },
+      "options": {
+        "precision": 0
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.precision_out_of_range"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "encode.error.precision_11",
+      "op": "encode",
+      "level": "core",
+      "group": "encode.error",
+      "description": "Precision above range",
+      "input": {
+        "value": [
+          {
+            "lat": 38.5,
+            "lon": -120.2
+          },
+          {
+            "lat": 40.7,
+            "lon": -120.95
+          },
+          {
+            "lat": 43.252,
+            "lon": -126.453
+          }
+        ]
+      },
+      "options": {
+        "precision": 11
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.precision_out_of_range"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "encode.error.overflow_scaled",
+      "op": "encode",
+      "level": "core",
+      "group": "encode.error",
+      "description": "Scaled value exceeds i64",
+      "input": {
+        "value": [
+          {
+            "lat": 1e+300,
+            "lon": 0.0
+          }
+        ]
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.overflow"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "encode.error.overflow_delta",
+      "op": "encode",
+      "level": "core",
+      "group": "encode.error",
+      "description": "Each value fits i64; their delta doesn't",
+      "input": {
+        "value": [
+          {
+            "lat": 900000000.0,
+            "lon": 0.0
+          },
+          {
+            "lat": -900000000.0,
+            "lon": 0.0
+          }
+        ]
+      },
+      "options": {
+        "precision": 10
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.overflow"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "encode.error.too_many_points",
+      "op": "encode",
+      "level": "core",
+      "group": "encode.error",
+      "description": "Three points with max_points 2",
+      "input": {
+        "value": [
+          {
+            "lat": 38.5,
+            "lon": -120.2
+          },
+          {
+            "lat": 40.7,
+            "lon": -120.95
+          },
+          {
+            "lat": 43.252,
+            "lon": -126.453
+          }
+        ]
+      },
+      "options": {
+        "max_points": 2
+      },
+      "expect": {
+        "error": {
+          "kind": "limit_exceeded",
+          "code": "polyline.too_many_points"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.google_example",
+      "op": "decode",
+      "level": "core",
+      "group": "decode",
+      "description": "Google's documented example",
+      "input": {
+        "value": "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+      },
+      "expect": {
+        "value": [
+          {
+            "lat": 38.5,
+            "lon": -120.2
+          },
+          {
+            "lat": 40.7,
+            "lon": -120.95
+          },
+          {
+            "lat": 43.252,
+            "lon": -126.453
+          }
+        ]
+      },
+      "compare": "float_tol",
+      "tolerance": 1e-12,
+      "source": "oracle",
+      "tags": [
+        "canonical"
+      ]
+    },
+    {
+      "id": "decode.single_point",
+      "op": "decode",
+      "level": "core",
+      "group": "decode",
+      "description": "One point",
+      "input": {
+        "value": "wtuwFtiqbM"
+      },
+      "expect": {
+        "value": [
+          {
+            "lat": 40.74844,
+            "lon": -73.98571
+          }
+        ]
+      },
+      "compare": "float_tol",
+      "tolerance": 1e-12,
+      "source": "oracle"
+    },
+    {
+      "id": "decode.precision_6",
+      "op": "decode",
+      "level": "core",
+      "group": "decode",
+      "description": "OSRM / Valhalla precision",
+      "input": {
+        "value": "qxavlA`jvblC_hEo}Lsh`AwaS"
+      },
+      "options": {
+        "precision": 6
+      },
+      "expect": {
+        "value": [
+          {
+            "lat": 40.748441,
+            "lon": -73.985713
+          },
+          {
+            "lat": 40.751657,
+            "lon": -73.978569
+          },
+          {
+            "lat": 40.785091,
+            "lon": -73.968285
+          }
+        ]
+      },
+      "compare": "float_tol",
+      "tolerance": 1e-12,
+      "source": "oracle"
+    },
+    {
+      "id": "decode.precision_10",
+      "op": "decode",
+      "level": "core",
+      "group": "decode",
+      "description": "Values beyond 32 bits",
+      "input": {
+        "value": "}~rwdkks@|~fpjwwgB"
+      },
+      "options": {
+        "precision": 10
+      },
+      "expect": {
+        "value": [
+          {
+            "lat": 89.9999999999,
+            "lon": -179.9999999999
+          }
+        ]
+      },
+      "compare": "float_tol",
+      "tolerance": 1e-12,
+      "source": "oracle"
+    },
+    {
+      "id": "decode.overlong",
+      "op": "decode",
+      "level": "core",
+      "group": "decode",
+      "description": "Extra zero chunks are accepted (A11, D-004)",
+      "input": {
+        "value": "_?_?_p~iF~ps|U"
+      },
+      "expect": {
+        "value": [
+          {
+            "lat": 0.0,
+            "lon": 0.0
+          },
+          {
+            "lat": 38.5,
+            "lon": -120.2
+          }
+        ]
+      },
+      "compare": "float_tol",
+      "tolerance": 1e-12,
+      "source": "oracle"
+    },
+    {
+      "id": "decode.round_trip_p5",
+      "op": "decode",
+      "level": "core",
+      "group": "round_trip",
+      "description": "Decodes what encode.* produced at precision 5",
+      "input": {
+        "value": "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+      },
+      "expect": {
+        "value": [
+          {
+            "lat": 38.5,
+            "lon": -120.2
+          },
+          {
+            "lat": 40.7,
+            "lon": -120.95
+          },
+          {
+            "lat": 43.252,
+            "lon": -126.453
+          }
+        ]
+      },
+      "compare": "float_tol",
+      "tolerance": 1e-12,
+      "source": "oracle"
+    },
+    {
+      "id": "decode.round_trip_p6",
+      "op": "decode",
+      "level": "core",
+      "group": "round_trip",
+      "description": "Decodes what encode.* produced at precision 6",
+      "input": {
+        "value": "qxavlA`jvblC_hEo}Lsh`AwaS"
+      },
+      "options": {
+        "precision": 6
+      },
+      "expect": {
+        "value": [
+          {
+            "lat": 40.748441,
+            "lon": -73.985713
+          },
+          {
+            "lat": 40.751657,
+            "lon": -73.978569
+          },
+          {
+            "lat": 40.785091,
+            "lon": -73.968285
+          }
+        ]
+      },
+      "compare": "float_tol",
+      "tolerance": 1e-12,
+      "source": "oracle"
+    },
+    {
+      "id": "decode.empty",
+      "op": "decode",
+      "level": "core",
+      "group": "decode",
+      "description": "Empty string decodes to empty list",
+      "input": {
+        "value": ""
+      },
+      "expect": {
+        "value": []
+      },
+      "compare": "float_tol",
+      "tolerance": 1e-12,
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.invalid_char_space",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "Space is outside 63-126",
+      "input": {
+        "value": "_p~iF ~ps|U"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.invalid_char",
+          "offset": 5
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.invalid_char_62",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "'>' (62) is just below the range",
+      "input": {
+        "value": ">p~iF~ps|U"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.invalid_char",
+          "offset": 0
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.invalid_char_del",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "DEL (127) is just above the range",
+      "input": {
+        "value": "_p~iF\u007f"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.invalid_char",
+          "offset": 5
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.invalid_char_non_ascii",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "Non-ASCII byte; offset counts UTF-8 bytes",
+      "input": {
+        "value": "_p~iF\u00e9"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.invalid_char",
+          "offset": 5
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.truncated_mid_value",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "Ends inside a value",
+      "input": {
+        "value": "_p~iF~ps|"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.truncated",
+          "offset": 5
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.truncated_odd_count",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "A latitude with no longitude",
+      "input": {
+        "value": "_p~iF~ps|U_ulL"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.truncated",
+          "offset": 10
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.overflow_chunks",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "13th chunk sets bits beyond 64",
+      "input": {
+        "value": "~~~~~~~~~~~~~?"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.overflow",
+          "offset": 0
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.overflow_14_chunks",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "A 14th chunk, even a zero one",
+      "input": {
+        "value": "_____________?"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.overflow",
+          "offset": 0
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.overflow_sum",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "Running latitude sum exceeds i64",
+      "input": {
+        "value": "____________G?____________G?"
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.overflow",
+          "offset": 14
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.precision_0",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "Precision below range",
+      "input": {
+        "value": "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+      },
+      "options": {
+        "precision": 0
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.precision_out_of_range"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.precision_11",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "Precision above range",
+      "input": {
+        "value": "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+      },
+      "options": {
+        "precision": 11
+      },
+      "expect": {
+        "error": {
+          "kind": "invalid_input",
+          "code": "polyline.precision_out_of_range"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.too_many_points",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "Three points with max_points 1",
+      "input": {
+        "value": "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+      },
+      "options": {
+        "max_points": 1
+      },
+      "expect": {
+        "error": {
+          "kind": "limit_exceeded",
+          "code": "polyline.too_many_points"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    },
+    {
+      "id": "decode.error.text_too_long",
+      "op": "decode",
+      "level": "core",
+      "group": "decode.error",
+      "description": "Input longer than max_text_length 4",
+      "input": {
+        "value": "_p~iF~ps|U_ulLnnqC_mqNvxq`@"
+      },
+      "options": {
+        "max_text_length": 4
+      },
+      "expect": {
+        "error": {
+          "kind": "limit_exceeded",
+          "code": "polyline.text_too_long"
+        }
+      },
+      "compare": "exact",
+      "source": "spec"
+    }
+  ]
+}
