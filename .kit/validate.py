@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["pyyaml", "jsonschema"]
+# ///
 """Validate a capability folder against the library standard.
 
-Usage:  python .kit/validate.py <library-repo-dir>      (inside a library repo)
-        python public/validate.py <library-repo-dir>   (from the standard repo)
-Needs:  pip install pyyaml jsonschema
+Usage:  uv run .kit/validate.py <library-repo-dir>      (inside a library repo)
+        uv run public/validate.py <library-repo-dir>   (from the standard repo)
+        (or `pip install pyyaml jsonschema` and run with python)
 
 Checks:
   1. spec/capability.yaml matches schemas/capability.schema.json
