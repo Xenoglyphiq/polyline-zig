@@ -32,3 +32,6 @@ jobs:
 
       - name: Canonical examples
         run: zig build examples
+
+      - name: Benchmark builds and round-trips the input (timings not recorded from CI)
+        run: zig build bench
