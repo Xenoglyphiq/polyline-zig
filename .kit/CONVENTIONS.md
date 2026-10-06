@@ -50,10 +50,13 @@ Every port has three layers, depending in this direction only: `integrations →
 
 ## 4. Conformance
 
-- `conformance/manifest.json` lists every case (schema: `.kit/schemas/fixture.schema.json`). Cases are generated from a pinned reference implementation named in `capability.yaml`.
+- `conformance/manifest.json` lists every case (schema: `.kit/schemas/fixture.schema.json`). Cases are generated from a pinned reference implementation named in `capability.yaml`. Cases that implementation can't produce (inputs it rejects badly, crashes on, or gets wrong) are written from the spec and marked `"source": "spec"`.
+- A case's `options` may set **limits** as well as tunables (`{"max_points": 2}`), so limit cases stay small. Every port's options value accepts the limits.
+- Inputs that aren't valid UTF-8 text use the `{"base64": …}` payload; runners decode it and pass the raw bytes to the operation.
+- Error cases assert `offset` wherever the spec defines one; runners compare it when present.
 - Each port has one runner that loads the manifest, runs every case at the levels it claims, converts results to canonical JSON (§5) and compares using the case's `compare` mode.
 - A port claims a level (`core`, `io`, `full`) only when every case at that level passes.
-- Validate spec and fixtures with `python .kit/validate.py .`
+- Validate spec and fixtures with `uv run .kit/validate.py .` (or `python .kit/validate.py .` after `pip install pyyaml jsonschema`).
 
 `capability.yaml` describes every field and parameter with these type names. Ports map them as below; fixtures encode them as canonical JSON.
 
