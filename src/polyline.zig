@@ -103,31 +103,30 @@ pub fn encode(gpa: Allocator, points: []const LonLat, opts: Options, diag: ?*Dia
     const scale = try checkPrecision(opts.precision, diag);
     if (points.len > opts.max_points) return fail(diag, "too_many_points", null, error.LimitExceeded);
 
-    // Pass 1: validate and scale every coordinate before any delta (spec error order).
-    for (points) |p| {
-        _ = try scaleValue(p.lat, scale, diag);
-        _ = try scaleValue(p.lon, scale, diag);
+    // Pass 1: scale every coordinate once, lat then lon, before any delta
+    // (spec error order). Scaling is the costly step, so it is done only here.
+    const scaled = try gpa.alloc(i64, 2 * points.len);
+    defer gpa.free(scaled);
+    for (points, 0..) |p, k| {
+        scaled[2 * k] = try scaleValue(p.lat, scale, diag);
+        scaled[2 * k + 1] = try scaleValue(p.lon, scale, diag);
     }
 
     // Pass 2: deltas, overflow checks and the exact output length.
     var len: usize = 0;
     var prev = [2]i64{ 0, 0 };
-    for (points) |p| {
-        const curr = [2]i64{ try scaleValue(p.lat, scale, diag), try scaleValue(p.lon, scale, diag) };
-        len += encodedLen(try delta(curr[0], prev[0], diag));
-        len += encodedLen(try delta(curr[1], prev[1], diag));
-        prev = curr;
+    for (scaled, 0..) |v, k| {
+        len += encodedLen(try delta(v, prev[k & 1], diag));
+        prev[k & 1] = v;
     }
 
     // Pass 3: write. No errors are possible past this point except allocation.
     const out = try gpa.alloc(u8, len);
     var i: usize = 0;
     prev = .{ 0, 0 };
-    for (points) |p| {
-        const curr = [2]i64{ scaleValue(p.lat, scale, null) catch unreachable, scaleValue(p.lon, scale, null) catch unreachable };
-        i += writeValue(out[i..], curr[0] - prev[0]);
-        i += writeValue(out[i..], curr[1] - prev[1]);
-        prev = curr;
+    for (scaled, 0..) |v, k| {
+        i += writeValue(out[i..], v - prev[k & 1]);
+        prev[k & 1] = v;
     }
     std.debug.assert(i == len);
     return out;
