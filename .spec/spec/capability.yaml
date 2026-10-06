@@ -3,7 +3,7 @@
 id: polyline
 name: Polyline
 summary: Encode and decode Google's Encoded Polyline Algorithm Format — lists of coordinates as compact ASCII strings.
-spec_version: 0.1.0
+spec_version: 0.1.1
 
 implements:
   - name: Encoded Polyline Algorithm Format

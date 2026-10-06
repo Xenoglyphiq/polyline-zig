@@ -1,6 +1,6 @@
 # Polyline — Spec
 
-> Capability id: `polyline` · Spec version: `0.1.0` · Status: draft
+> Capability id: `polyline` · Spec version: `0.1.1` · Status: draft
 > Implements: Encoded Polyline Algorithm Format (unversioned, retrieved 2026-10-05) — https://developers.google.com/maps/documentation/utilities/polylinealgorithm
 > Machine-readable contract: `capability.yaml` (this file explains it; if they disagree, fix one of them in the same PR)
 

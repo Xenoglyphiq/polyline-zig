@@ -1,0 +1,15 @@
+[package]
+name = "polyline-bench-reference"
+version = "0.0.0"
+edition = "2024"
+publish = false
+license = "MIT OR Apache-2.0"
+description = "Reference timings for the polyline spec: the Rust polyline crate on bench/route_100k.polyline"
+
+[dependencies]
+polyline = "=0.11.0"
+geo-types = "0.7"
+
+[profile.release]
+codegen-units = 1
+lto = true

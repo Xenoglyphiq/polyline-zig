@@ -25,7 +25,7 @@ from pathlib import Path
 import polyline as oracle
 
 ORACLE = {"language": "python", "package": "polyline", "version": "2.0.4", "script": "generate/generate.py"}
-SPEC_VERSION = "0.1.0"
+SPEC_VERSION = "0.1.1"
 GENERATED_AT = "2026-10-05T00:00:00Z"  # bump by hand when cases change
 OUT = Path(__file__).resolve().parents[1] / "manifest.json"
 
