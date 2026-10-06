@@ -1,6 +1,6 @@
 # Polyline for Zig
 
-Encode and decode lists of coordinates as compact ASCII strings. Implements Google's Encoded Polyline Algorithm Format · Spec v0.1.0 · Conformance: **core ✓ full ✓** (44/44)
+Encode and decode lists of coordinates as compact ASCII strings. Implements Google's Encoded Polyline Algorithm Format · Spec v0.1.1 · Conformance: **core ✓ full ✓** (44/44)
 
 > **Coordinate order:** `LonLat` is `(lon, lat)`; the encoded string stores latitude first. The library converts at the boundary.
 
